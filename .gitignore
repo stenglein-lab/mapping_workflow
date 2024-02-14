@@ -1,0 +1,6 @@
+.nextflow*
+**/*.pdf
+work
+results
+*.swp
+Drosoph*
