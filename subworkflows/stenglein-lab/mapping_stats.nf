@@ -44,7 +44,7 @@ workflow MAPPING_STATS {
   if (per_base_depth) {
     // the second null input is placeholder for a possible interval bedfile
     SAMTOOLS_DEPTH(bam)
-	 ch_depth    = ch_depth.mix    ( SAMTOOLS_DEPTH.out.depth )
+    ch_depth    = ch_depth.mix    ( SAMTOOLS_DEPTH.out.tsv )
     ch_versions = ch_versions.mix ( SAMTOOLS_DEPTH.out.versions )      
   }
 

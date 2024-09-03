@@ -1,0 +1,4 @@
+S_pal_ITS_1_putative	Scaptomyza_pallida
+D_sim_ITS_1	Drosophila_simulans
+D_put_ITS_1	Drosophila_putrida
+D_mel_ITS_1	Drosophila_melanogaster

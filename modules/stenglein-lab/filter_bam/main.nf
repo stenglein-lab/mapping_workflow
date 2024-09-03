@@ -22,15 +22,17 @@ process FILTER_BAM {
 	   def args2 = task.ext.args2 ?: ''
 		// index only in case need to do random retrieval (specifying regions in samtools view)
 		def index_command = args2 ? "samtools index $input" : ''
+
+          // --exclude-flags 0x4 \\
+
       """
       $index_command
 
       samtools \\
           view \\
-          --exclude-flags 0x4 \\
           --threads ${task.cpus-1} \\
           $args \\
-			 --output-fmt bam \\
+          --output-fmt bam \\
           -o ${meta.id}.filt.bam \\
           $input \\
           $args2

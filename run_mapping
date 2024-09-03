@@ -1,8 +1,0 @@
-#!/bin/bash 
-
-nextflow run main.nf \
-  -resume \
-  -profile local,singularity \
-  --fastq_dir ../../read_preprocessing/trimmed_fastq/ \
-  --fastq_pattern "*_[12].fastq.gz" \
-  --genome_fasta refseq/Drosophila_melanogaster.BDGP6.32.dna.toplevel.fa.gz 
