@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# count mapping reads from samtools stats page
+
+id=$1
+
+mr=`grep ^SN ${id}.stats | cut -f 2-  | grep "reads mapped:" | cut -f 2`
+
+printf "%s\t%s\n" $id $mr

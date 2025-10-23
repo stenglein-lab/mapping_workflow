@@ -1,6 +1,10 @@
 include { SAMTOOLS_STATS                         } from '../../modules/nf-core/samtools/stats/main'
 include { SAMTOOLS_COVERAGE                      } from '../../modules/nf-core/samtools/coverage/main'
 include { SAMTOOLS_DEPTH                         } from '../../modules/nf-core/samtools/depth/main'
+include { PREPEND_TSV_WITH_ID as PREPEND_STATS_WITH_ID } from '../../modules/stenglein-lab/prepend_tsv_with_id'
+include { PREPEND_TSV_WITH_ID as PREPEND_COV_WITH_ID   } from '../../modules/stenglein-lab/prepend_tsv_with_id'
+include { PREPEND_TSV_WITH_ID as PREPEND_DEPTH_WITH_ID } from '../../modules/stenglein-lab/prepend_tsv_with_id'
+
 
 /*
   Calculate basic mapping summary statistics from bam
@@ -26,6 +30,10 @@ workflow MAPPING_STATS {
   SAMTOOLS_STATS(bam, genome_fasta)
   ch_versions = ch_versions.mix ( SAMTOOLS_STATS.out.versions )      
 
+  COUNT_MAPPING_READS(SAMTOOLS_STATS.out.stats)
+
+  // PREPEND_STATS_WITH_ID(SAMTOOLS_STATS.out.stats)
+
   // ------------------
   // samtools coverage
   // ------------------
@@ -34,6 +42,9 @@ workflow MAPPING_STATS {
   SAMTOOLS_COVERAGE(bam)
   ch_versions = ch_versions.mix ( SAMTOOLS_COVERAGE.out.versions )      
 
+  PREPEND_COV_WITH_ID(SAMTOOLS_COVERAGE.out.coverage)
+
+
   // ------------------
   // samtools depth
   // ------------------
@@ -41,10 +52,15 @@ workflow MAPPING_STATS {
   // only run if requested to do so
 
   ch_depth = Channel.empty()
+  ch_prepended_depth = Channel.empty()
   if (per_base_depth) {
     // the second null input is placeholder for a possible interval bedfile
     SAMTOOLS_DEPTH(bam)
-    ch_depth    = ch_depth.mix    ( SAMTOOLS_DEPTH.out.tsv )
+
+    // do these extra mix calls because possibility of empty channel
+    ch_depth           = ch_depth.mix           ( SAMTOOLS_DEPTH.out.tsv )
+    ch_prepended_depth = ch_prepended_depth.mix ( PREPEND_DEPTH_WITH_ID(SAMTOOLS_DEPTH.out.tsv))
+
     ch_versions = ch_versions.mix ( SAMTOOLS_DEPTH.out.versions )      
   }
 
@@ -53,5 +69,9 @@ workflow MAPPING_STATS {
   stats         = SAMTOOLS_STATS.out.stats
   coverage      = SAMTOOLS_COVERAGE.out.coverage
   depth         = ch_depth
+  prepended_stats    = PREPEND_STATS_WITH_ID.out.tsv
+  prepended_coverage = PREPEND_COV_WITH_ID.out.tsv
+  prepended_depth    = ch_prepended_depth
+
 
 }

@@ -1,0 +1,12 @@
+#!/bin/bash 
+
+# run host-mapping workflow for DC datasets
+# MDS 7/30/2025
+
+nextflow run main.nf \
+  -resume \
+  -profile local,singularity \
+  --outdir results \
+  --fastq_dir ../preprocessed_reads/trimmed_fastq/ \
+  --fastq_pattern "*trim_[12].fastq.gz" \
+  --genome_fasta /home/databases/fly/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.and_rna.fna.gz

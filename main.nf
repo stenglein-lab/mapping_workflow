@@ -2,9 +2,9 @@
 
 nextflow.enable.dsl=2
 
-include { COMPETITIVE_MAPPING_WORKFLOW } from './subworkflows/stenglein-lab/competitive_mapping_workflow'
+include { MAPPING_WORKFLOW } from './subworkflows/stenglein-lab/mapping_workflow'
 
 workflow {
-    COMPETITIVE_MAPPING_WORKFLOW ()
+    MAPPING_WORKFLOW ()
 }
 
